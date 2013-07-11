@@ -31,7 +31,7 @@
 struct node* nodenew()
 {
 	struct node* newnode = (struct node*)malloc(sizeof(struct node));
-	if(!newnode) return NULL;
+	VALIDPNTR(newnode, NULL);
 
 	newnode->data = newnode->prev = newnode->next = NULL;
 
@@ -41,8 +41,7 @@ struct node* nodenew()
 LList* llnew()
 {
 	LList* newlist = (LList*)malloc(sizeof(LList));
-	if(!newlist)
-		return NULL;
+	VALIDPNTR(newlist, NULL);
 
 	newlist->head = NULL;
 	newlist->tail = NULL;
@@ -53,9 +52,7 @@ LList* llnew()
 
 int lldestroy(LList* list)
 {
-	if(list == NULL)
-		return 1;
-
+	VALIDPNTR(list,0);
 	struct node* crnt = list->head;
 	struct node* temp = NULL;
 	while(crnt)	
@@ -76,13 +73,13 @@ LList* llappend(LList* list, void* value)
 LList* llinsert(LList* list, void* value, int index)
 {
 	//error check
-	VALIDPNTR(list);
+	VALIDPNTR(list,NULL);
 	if(index < 0 || index > list->length) return NULL;
 
 	//create new node
 	struct node* newnode; 
 	newnode = nodenew();
-	if(!newnode) return NULL;
+	VALIDPNTR(newnode,NULL);
 	newnode->data = value;
 
 	//insert node into list
@@ -105,9 +102,9 @@ LList* llinsert(LList* list, void* value, int index)
 
 LList*  llset(LList* list, void* value, int index)
 {
-	VALIDPNTR(list);
+	VALIDPNTR(list,NULL);
 	struct node* temp = llget(list,index);
-	VALIDPNTR(temp);
+	VALIDPNTR(temp,NULL);
 	
 	temp->data = value;
 
@@ -116,7 +113,7 @@ LList*  llset(LList* list, void* value, int index)
 
 struct node* llget(LList* list, int index)
 {
-	VALIDPNTR(list);
+	VALIDPNTR(list,NULL);
 	if(index < list->length && index >= 0)
 	{
 		int i;

@@ -34,15 +34,14 @@ shell):
     $make
       ...
     $make check [optional and so far isn't implemented]
-    $make install
+    $sudo make install
       ...
-    $make clean
 
 This will install libllist.so.x.y.z to /usr/lib/ by default (as well as create a
 symbolic link to libllist.so.x.y.z called libllist.so. To change this please
 edit the Makefile and then run: 
 
-    $make reinstall
+    $sudo make reinstall
 
 Documentation 
 =============

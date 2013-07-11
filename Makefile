@@ -10,6 +10,7 @@ LIBNAME=libllist
 LIBDIR=lib
 
 INSTALL=/usr/lib
+HEADERINSTALL=/usr/include/
 VERSION=0.0.1
 
 IDIR=lib
@@ -30,13 +31,14 @@ OBJ:=$(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRC))
 all: setup $(OBJ) 
 	$(CC) $(LFLAGS) $(OBJ) -o $(LIBDIR)/$(OUTNAME)
 
-reinstall: remove install
+reinstall: uninstall install clean
 
-install: all
+install: all clean
+	install $(IDIR)/*.h -t $(HEADERINSTALL)
 	install $(LIBDIR)/$(OUTNAME) -t $(INSTALL)
 	ldconfig -n $(INSTALL) 
 
-remove: 
+uninstall: 
 	rm -Ii $(INSTALL)/$(OUTNAME)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c 

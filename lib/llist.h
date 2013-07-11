@@ -34,7 +34,7 @@
  * it is.
  */
 #ifndef VALIDPNTR
-#define VALIDPNTR(x) if(!x) return NULL
+#define VALIDPNTR(x,returnval) if(!x) return returnval
 #endif 
 
 #ifndef __LLIST
