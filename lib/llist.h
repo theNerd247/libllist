@@ -162,4 +162,47 @@ LList* llinsert(LList* list, void* value, int index);
  */
 LList*  llset(LList* list, void* value, int index);
 
+/*
+ * FUNCTION: llapply
+ * 
+ * PARAMETERS: LList* list, void (func*)(void* data) 
+ *
+ * RETURNS: LList* - given LList* with applied values
+ * 
+ * DESCRIPTION: applys a function to ALL the data nodes in a given LList
+ *
+ * NOTE: returns NULL if error occurs
+ * NOTE: second argument should be a function that performs operations on the data of a node
+ */
+LList* llapply(LList* list, void (*func)(void* data));
+
+/*
+ * FUNCTION: llfilter
+ * 
+ * PARAMETERS: LList* list, char (func*)(void* data)
+ *
+ * RETURNS: LList* - newly created LList*
+ * 
+ * DESCRIPTION: traverses the entire llist and creates a new LList containing the nodes 
+ * for which (func*) returns a value greater than 0
+ *
+ * NOTE: returns NULL if error occurs
+ */
+LList* llfilter(LList* list, char (*func)(void* data));
+
+/*
+ * FUNCTION: llmap
+ * 
+ * PARAMETERS: LList* list, void* (func*)(void* data)
+ *
+ * RETURNS: LList* - newly created LList*
+ * 
+ * DESCRIPTION: exactly the same as llapply but store the results in a new 
+ * list instead of back into the given list.
+ *
+ * NOTE: returns NULL if error occurs
+ * NOTE: second argument should be a function that creates a new value to be contained by a new node
+ */
+LList* llmap(LList* list, void* (*func)(void* data));
+
 #endif 

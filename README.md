@@ -63,6 +63,8 @@ level (1 being the highest)
 
 Changelog
 =========
+0.0.2
+	* 3 new functions (llapply, llfilter, llmap)! See llist.h for their details
 0.0.1
   * repository initialized (Makefile, this REAMDE file, and much much more!)
   * basic llist functions (llnew, lladd, llinsert, llget) created

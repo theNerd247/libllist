@@ -8,10 +8,15 @@ CC=gcc
 
 LIBNAME=libllist
 LIBDIR=lib
+VERSION=0.0.2
 
-INSTALL=/usr/lib
-HEADERINSTALL=/usr/include/
-VERSION=0.0.1
+PKGNAME=$(LIBNAME)-$(VERSION)
+PKGLIST=Makefile lib/ README.md gpl-3.0.txt
+
+DESTDIR=
+PREFIX=$(DESTDIR)/usr
+INSTALLDIR=$(PREFIX)/lib
+HEADERINSTALL=$(PREFIX)/include
 
 IDIR=lib
 SONAME=$(LIBNAME).so
@@ -26,20 +31,20 @@ SRC:=$(wildcard $(SRCDIR)/$(SRCS))
 OBJDIR=obj
 OBJ:=$(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRC))
 
-.PHONY: setup clean install
+.PHONY: setup clean install pkg
 
 all: setup $(OBJ) 
 	$(CC) $(LFLAGS) $(OBJ) -o $(LIBDIR)/$(OUTNAME)
 
-reinstall: uninstall install clean
+reinstall: uninstall install clean 
 
 install: all clean
 	install $(IDIR)/*.h -t $(HEADERINSTALL)
-	install $(LIBDIR)/$(OUTNAME) -t $(INSTALL)
-	ldconfig -n $(INSTALL) 
+	install $(LIBDIR)/$(OUTNAME) -t $(INSTALLDIR)
+	ldconfig -n $(INSTALLDIR) 
 
 uninstall: 
-	rm -Ii $(INSTALL)/$(OUTNAME)
+	rm -Ii $(INSTALLDIR)/$(SONAME).*
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c 
 	$(CC) $(LFLAGS) $(CFLAGS) $< -o $@
@@ -50,3 +55,11 @@ setup:
 
 clean: 
 	rm -rf $(OBJDIR)
+
+pkg:
+	mkdir -p $(PKGNAME)
+	cp -r $(PKGLIST) $(PKGNAME)
+	tar -uvhf $(PKGNAME).tar $(PKGNAME)
+	gzip $(PKGNAME).tar
+	md5sum $(PKGNAME).tar.gz > md5.txt
+	rm -r $(PKGNAME)

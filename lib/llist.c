@@ -131,3 +131,54 @@ void* llgetvalue(LList* list, int index)
 {
 	return (llget(list,index))->data;
 }
+
+LList* llapply(LList* list, void (*func)(void* data))
+{
+	VALIDPNTR(list,NULL);
+	VALIDPNTR(func,NULL);
+
+	struct node* curr = list->head;
+	while(curr)
+	{	
+		(*func)(curr->data);
+		curr=curr->next;
+	}
+
+	return list;
+}
+
+LList* llmap(LList* list, void* (*func)(void* data))
+{
+	VALIDPNTR(list,NULL);
+	VALIDPNTR(func,NULL);
+	
+	LList* newlst;
+	if(! (newlst = llnew())) return NULL; 
+
+	struct node* curr = list->head;
+	while(curr)
+	{
+ 		llappend(newlst, (*func)(curr->data));
+		curr = curr->next;	
+	}	
+
+	return newlst;
+}
+
+LList* llfilter(LList* list, char (*func)(void* data))
+{
+	VALIDPNTR(list,NULL);
+	VALIDPNTR(func,NULL);
+	
+	LList* newlst;
+	if(! (newlst = llnew())) return NULL; 
+
+	struct node* curr = list->head;
+	while(curr)
+	{
+		if((*func)(curr->data)) llappend(newlst, curr->data);
+		curr = curr->next;	
+	}	
+
+	return newlst;
+}
