@@ -39,12 +39,14 @@ all: setup $(OBJ)
 reinstall: uninstall install clean 
 
 install: all clean
+	mkdir -p $(HEADERINSTALL)
+	mkdir -p $(INSTALLDIR) 
 	install $(IDIR)/*.h -t $(HEADERINSTALL)
 	install $(LIBDIR)/$(OUTNAME) -t $(INSTALLDIR)
 	ldconfig -n $(INSTALLDIR) 
 
 uninstall: 
-	rm -Ii $(INSTALLDIR)/$(SONAME).*
+	rm -Ii $(INSTALLDIR)/$(SONAME)*
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c 
 	$(CC) $(LFLAGS) $(CFLAGS) $< -o $@

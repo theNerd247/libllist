@@ -16,7 +16,11 @@ Installing
 Nothing new here, use the self-help way of installing software (for Linux only
 so far). 
 
-__NOTICE:__ Arch Linux users! A PKGBUILD file will be coming soon!
+__NOTICE:__ Arch Linux users! A PKGBUILD file has been included. download it at:
+
+https://github.com/theNerd247/libllist/raw/PKGBUILD
+
+Then use the awesome makepkg tools to build and install! 
 
 Configuring
 -----------
@@ -28,7 +32,7 @@ repo (git@github.com:theNerd247/libllist.git)
 
 Building
 --------
-Simply type follow these steps (btw '$' delimits a command prompt as seen on a
+Simply follow these steps (btw '$' delimits a command prompt as seen on a
 shell): 
 
     $make
@@ -64,6 +68,7 @@ level (1 being the highest)
 Changelog
 =========
 0.0.2
+	* PKGBUILD file added
 	* 3 new functions (llapply, llfilter, llmap)! See llist.h for their details
 0.0.1
   * repository initialized (Makefile, this REAMDE file, and much much more!)
