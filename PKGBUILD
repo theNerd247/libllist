@@ -6,7 +6,7 @@ arch=('i686' 'x86_64')
 url=https://www.github.com/theNerd247/libllist
 license=('GPL')
 source=("https://github.com/theNerd247/libllist/raw/master/$pkgname-$pkgver.tar.gz")
-md5sums=('a5340b2021d64db5911a477bb3d4ff08 ')
+md5sums=('cd21b669bc6d9fd5433154637efc28b7')
 
 build()
 {
