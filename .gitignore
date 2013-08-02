@@ -3,3 +3,6 @@ lib/libllist.so*
 
 #test files 
 tst/
+
+#Arch Linux PKGBUILD
+PKGBUILD

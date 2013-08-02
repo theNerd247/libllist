@@ -16,11 +16,10 @@ Installing
 Nothing new here, use the self-help way of installing software (for Linux only
 so far). 
 
-__NOTICE:__ Arch Linux users! A PKGBUILD file has been included. download it at:
+__NOTICE:__ Arch Linux users! This software can be found on the AUR download it at:
 
-https://github.com/theNerd247/libllist/raw/PKGBUILD
 
-Then use the awesome makepkg tools to build and install! 
+https://aur.archlinux.org/packages/libllist/
 
 Configuring
 -----------
@@ -28,7 +27,7 @@ Configuring
 so will not (for now) revert to huge build tools such as automake/autoconf cmake
 or the like. Please edit the Makefile to suit your compile time needs. If you do
 edit the Makefile please commit the change and send a pull request to upstream
-repo (git@github.com:theNerd247/libllist.git)
+repo (git@github.com:theNerd247/libllist.git).
 
 Building
 --------
@@ -67,6 +66,8 @@ level (1 being the highest)
 
 Changelog
 =========
+Patch: 0.0.2-1
+	* removed the PKGBUILD and md5 sum as they are only needed for Arch Linux users
 0.0.2
 	* PKGBUILD file added
 	* 3 new functions (llapply, llfilter, llmap)! See llist.h for their details
