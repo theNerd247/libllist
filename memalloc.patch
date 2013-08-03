@@ -1,0 +1,340 @@
+From 356144530087b84757f09c0842b2a8ae5d23f7f4 Mon Sep 17 00:00:00 2001
+From: theNerd247 <harvey.coder247@gmail.com>
+Date: Sat, 3 Aug 2013 16:28:34 -0400
+Subject: [PATCH] added nodedestroy func
+
+---
+ include/llist.h |  34 ++++++++++++++++++++++++----------
+ src/llist.c     |  40 +++++++++++++++++++++++++---------------
+ tst/compile.sh  |   1 -
+ tst/llist_tst.c |  26 --------------------------
+ tst/lltst       | Bin 9525 -> 0 bytes
+ 5 files changed, 49 insertions(+), 52 deletions(-)
+ delete mode 100755 tst/compile.sh
+ delete mode 100644 tst/llist_tst.c
+ delete mode 100755 tst/lltst
+
+diff --git a/include/llist.h b/include/llist.h
+index 562f1db..015b3a8 100644
+--- a/include/llist.h
++++ b/include/llist.h
+@@ -40,17 +40,17 @@
+ #ifndef __LLIST
+ #define __LLIST
+ 
+-struct node
++typedef struct node_st
+ {
+ 	void* data;
+-	struct node* next;
+-	struct node* prev;
+-};
++	Node* next;
++	Node* prev;
++} Node;
+ 
+ typedef struct llist
+ {
+-	struct node* head;
+-	struct node* tail;
++	Node* head;
++	Node* tail;
+ 	int length;	
+ } LList;
+ 
+@@ -59,13 +59,27 @@ typedef struct llist
+  * 
+  * PARAMETERS: 
+  *
+- * RETURNS: struct node* - new node
++ * RETURNS: Node* - new node
+  * 
+  * DESCRIPTION: creates a newly created node with all initial values = NULL;
+  *
+  * NOTE: returns a NULL pointer on error
+  */
+-struct node* nodenew();
++Node* nodenew();
++
++/*
++ * FUNCTION: nodedestroy
++ * 
++ * PARAMETERS: Node* node
++ *
++ * RETURNS: int - error code 
++ * 
++ * DESCRIPTION: frees memory used by given node (including the Node* itself)
++ *
++ * NOTE: this does not free the next and prev variables in the structure as this will destroy the
++ * list the node is found in
++ */
++int nodedestroy(Node* node);
+ 
+ /*
+  * FUNCTION: llnew
+@@ -117,13 +131,13 @@ LList* llappend(LList* list, void* value);
+  * 
+  * PARAMETERS: LList* list, int index
+  *
+- * RETURNS: struct node* - node pointer 
++ * RETURNS: Node* - node pointer 
+  * 
+  * DESCRIPTION: pointer to node found at the given index. 
+  *
+  * NOTE: if occurs NULL pointer is returned
+  */
+-struct node* llget(LList* list, int index);
++Node* llget(LList* list, int index);
+ 
+ /*
+  * FUNCTION: llgetvalue
+diff --git a/src/llist.c b/src/llist.c
+index 06d3194..c0bfeb1 100644
+--- a/src/llist.c
++++ b/src/llist.c
+@@ -28,9 +28,9 @@
+ #include "llist.h"
+ #include <stdlib.h>
+ 
+-struct node* nodenew()
++Node* nodenew()
+ {
+-	struct node* newnode = (struct node*)malloc(sizeof(struct node));
++	Node* newnode = (Node*)malloc(sizeof(Node));
+ 	VALIDPNTR(newnode, NULL);
+ 
+ 	newnode->data = newnode->prev = newnode->next = NULL;
+@@ -38,6 +38,14 @@ struct node* nodenew()
+ 	return newnode;
+ }
+ 
++int nodedestroy(Node* node)
++{
++	VALIDPNTR(node,1);
++	free(nd->data);
++	free(node);
++	return 0;
++}
++
+ LList* llnew()
+ {
+ 	LList* newlist = (LList*)malloc(sizeof(LList));
+@@ -52,9 +60,9 @@ LList* llnew()
+ 
+ int lldestroy(LList* list)
+ {
+-	VALIDPNTR(list,0);
+-	struct node* crnt = list->head;
+-	struct node* temp = NULL;
++	VALIDPNTR(list,1);
++	Node* crnt = list->head;
++	Node* temp = NULL;
+ 	while(crnt)	
+ 	{
+ 		temp = crnt;
+@@ -77,14 +85,14 @@ LList* llinsert(LList* list, void* value, int index)
+ 	if(index < 0 || index > list->length) return NULL;
+ 
+ 	//create new node
+-	struct node* newnode; 
++	Node* newnode; 
+ 	newnode = nodenew();
+ 	VALIDPNTR(newnode,NULL);
+ 	newnode->data = value;
+ 
+ 	//insert node into list
+-	struct node* prevnode = llget(list, index-1);
+-	struct node* nextnode = llget(list, index);
++	Node* prevnode = llget(list, index-1);
++	Node* nextnode = llget(list, index);
+ 	newnode->prev = prevnode;
+ 	newnode->next = nextnode;
+ 
+@@ -103,7 +111,7 @@ LList* llinsert(LList* list, void* value, int index)
+ LList*  llset(LList* list, void* value, int index)
+ {
+ 	VALIDPNTR(list,NULL);
+-	struct node* temp = llget(list,index);
++	Node* temp = llget(list,index);
+ 	VALIDPNTR(temp,NULL);
+ 	
+ 	temp->data = value;
+@@ -111,13 +119,13 @@ LList*  llset(LList* list, void* value, int index)
+ 	return list;
+ }
+ 
+-struct node* llget(LList* list, int index)
++Node* llget(LList* list, int index)
+ {
+ 	VALIDPNTR(list,NULL);
+ 	if(index < list->length && index >= 0)
+ 	{
+ 		int i;
+-		struct node* temp = list->head;
++		Node* temp = list->head;
+ 		for(i = 0; i < list->length; i++)
+ 		{
+ 			if(i == index) return temp;
+@@ -129,7 +137,9 @@ struct node* llget(LList* list, int index)
+ 
+ void* llgetvalue(LList* list, int index)
+ {
+-	return (llget(list,index))->data;
++	Node* tmp = llget(list,index);
++	VALIDPNTR(tmp,NULL);
++	return tmp->data;
+ }
+ 
+ LList* llapply(LList* list, void (*func)(void* data))
+@@ -137,7 +147,7 @@ LList* llapply(LList* list, void (*func)(void* data))
+ 	VALIDPNTR(list,NULL);
+ 	VALIDPNTR(func,NULL);
+ 
+-	struct node* curr = list->head;
++	Node* curr = list->head;
+ 	while(curr)
+ 	{	
+ 		(*func)(curr->data);
+@@ -155,7 +165,7 @@ LList* llmap(LList* list, void* (*func)(void* data))
+ 	LList* newlst;
+ 	if(! (newlst = llnew())) return NULL; 
+ 
+-	struct node* curr = list->head;
++	Node* curr = list->head;
+ 	while(curr)
+ 	{
+  		llappend(newlst, (*func)(curr->data));
+@@ -173,7 +183,7 @@ LList* llfilter(LList* list, char (*func)(void* data))
+ 	LList* newlst;
+ 	if(! (newlst = llnew())) return NULL; 
+ 
+-	struct node* curr = list->head;
++	Node* curr = list->head;
+ 	while(curr)
+ 	{
+ 		if((*func)(curr->data)) llappend(newlst, curr->data);
+diff --git a/tst/compile.sh b/tst/compile.sh
+deleted file mode 100755
+index b2640b4..0000000
+--- a/tst/compile.sh
++++ /dev/null
+@@ -1 +0,0 @@
+-  gcc llist_tst.c -o lltst -I../include -L/home/noah/src/com/llist/lib/ -lllist -g
+diff --git a/tst/llist_tst.c b/tst/llist_tst.c
+deleted file mode 100644
+index ffc8b46..0000000
+--- a/tst/llist_tst.c
++++ /dev/null
+@@ -1,26 +0,0 @@
+-#include <llist.h>
+-#include <stdio.h>
+-
+-int main(int argc, char const *argv[])
+-{
+-	LList* testlist = llnew();	
+-
+-	int d1[1] = {1};
+-	int d2[1] = {100};
+-	int d3[1] = {1000};
+-
+-	llappend(testlist, d1);
+-	int* a = (int*)llgetvalue(testlist,0);
+-	printf("Value 1: %i\n",*a);
+-
+-	llinsert(testlist, d2, 0);
+-	a = (int*)llgetvalue(testlist,0);
+-	int* b = (int*)llgetvalue(testlist,1);
+-	printf("Value 1: %i\nValue 2: %i\n",*a,*b);
+-
+-	llset(testlist, d3, 1);
+-	a = (int*)llgetvalue(testlist,0);
+-	b = (int*)llgetvalue(testlist,1);
+-	printf("Value 1: %i\nValue 2: %i\n",*a,*b);
+-	return 0;
+-}
+diff --git a/tst/lltst b/tst/lltst
+deleted file mode 100755
+index 229d853d3b5f951b65bb3dce5ed7e23b35f6b8e2..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 9525
+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
+
+-- 
+1.8.3.4
+
