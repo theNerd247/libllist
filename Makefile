@@ -11,7 +11,7 @@ LIBDIR=lib
 VERSION=0.0.2
 
 PKGNAME=$(LIBNAME)-$(VERSION)
-PKGLIST=Makefile lib/ README.md gpl-3.0.txt
+PKGLIST=Makefile include/ src/ README.md gpl-3.0.txt
 
 DESTDIR=
 PREFIX=$(DESTDIR)/usr
