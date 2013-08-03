@@ -18,14 +18,14 @@ PREFIX=$(DESTDIR)/usr
 INSTALLDIR=$(PREFIX)/lib
 HEADERINSTALL=$(PREFIX)/include
 
-IDIR=lib
+IDIR=include
 SONAME=$(LIBNAME).so
 OUTNAME=$(LIBNAME).so.$(VERSION)
 LFLAGS=-I$(IDIR) -lm -shared -fPIC -Wl,-soname,$(SONAME)
 CFLAGS=-c -Wall -g #uncomment for debuging with gdb
 
 SRCS=*.c 
-SRCDIR=lib
+SRCDIR=src
 SRC:=$(wildcard $(SRCDIR)/$(SRCS))
 
 OBJDIR=obj
