@@ -40,17 +40,17 @@
 #ifndef __LLIST
 #define __LLIST
 
-struct node
+typedef struct node_st
 {
 	void* data;
-	struct node* next;
-	struct node* prev;
-};
+	Node* next;
+	Node* prev;
+} Node;
 
 typedef struct llist
 {
-	struct node* head;
-	struct node* tail;
+	Node* head;
+	Node* tail;
 	int length;	
 } LList;
 
@@ -59,13 +59,27 @@ typedef struct llist
  * 
  * PARAMETERS: 
  *
- * RETURNS: struct node* - new node
+ * RETURNS: Node* - new node
  * 
  * DESCRIPTION: creates a newly created node with all initial values = NULL;
  *
  * NOTE: returns a NULL pointer on error
  */
-struct node* nodenew();
+Node* nodenew();
+
+/*
+ * FUNCTION: nodedestroy
+ * 
+ * PARAMETERS: Node* node
+ *
+ * RETURNS: int - error code 
+ * 
+ * DESCRIPTION: frees memory used by given node (including the Node* itself)
+ *
+ * NOTE: this does not free the next and prev variables in the structure as this will destroy the
+ * list the node is found in
+ */
+int nodedestroy(Node* node);
 
 /*
  * FUNCTION: llnew
@@ -117,13 +131,13 @@ LList* llappend(LList* list, void* value);
  * 
  * PARAMETERS: LList* list, int index
  *
- * RETURNS: struct node* - node pointer 
+ * RETURNS: Node* - node pointer 
  * 
  * DESCRIPTION: pointer to node found at the given index. 
  *
  * NOTE: if occurs NULL pointer is returned
  */
-struct node* llget(LList* list, int index);
+Node* llget(LList* list, int index);
 
 /*
  * FUNCTION: llgetvalue

@@ -28,14 +28,22 @@
 #include "llist.h"
 #include <stdlib.h>
 
-struct node* nodenew()
+Node* nodenew()
 {
-	struct node* newnode = (struct node*)malloc(sizeof(struct node));
+	Node* newnode = (Node*)malloc(sizeof(Node));
 	VALIDPNTR(newnode, NULL);
 
 	newnode->data = newnode->prev = newnode->next = NULL;
 
 	return newnode;
+}
+
+int nodedestroy(Node* node)
+{
+	VALIDPNTR(node,1);
+	free(nd->data);
+	free(node);
+	return 0;
 }
 
 LList* llnew()
@@ -52,9 +60,9 @@ LList* llnew()
 
 int lldestroy(LList* list)
 {
-	VALIDPNTR(list,0);
-	struct node* crnt = list->head;
-	struct node* temp = NULL;
+	VALIDPNTR(list,1);
+	Node* crnt = list->head;
+	Node* temp = NULL;
 	while(crnt)	
 	{
 		temp = crnt;
@@ -77,14 +85,14 @@ LList* llinsert(LList* list, void* value, int index)
 	if(index < 0 || index > list->length) return NULL;
 
 	//create new node
-	struct node* newnode; 
+	Node* newnode; 
 	newnode = nodenew();
 	VALIDPNTR(newnode,NULL);
 	newnode->data = value;
 
 	//insert node into list
-	struct node* prevnode = llget(list, index-1);
-	struct node* nextnode = llget(list, index);
+	Node* prevnode = llget(list, index-1);
+	Node* nextnode = llget(list, index);
 	newnode->prev = prevnode;
 	newnode->next = nextnode;
 
@@ -103,7 +111,7 @@ LList* llinsert(LList* list, void* value, int index)
 LList*  llset(LList* list, void* value, int index)
 {
 	VALIDPNTR(list,NULL);
-	struct node* temp = llget(list,index);
+	Node* temp = llget(list,index);
 	VALIDPNTR(temp,NULL);
 	
 	temp->data = value;
@@ -111,13 +119,13 @@ LList*  llset(LList* list, void* value, int index)
 	return list;
 }
 
-struct node* llget(LList* list, int index)
+Node* llget(LList* list, int index)
 {
 	VALIDPNTR(list,NULL);
 	if(index < list->length && index >= 0)
 	{
 		int i;
-		struct node* temp = list->head;
+		Node* temp = list->head;
 		for(i = 0; i < list->length; i++)
 		{
 			if(i == index) return temp;
@@ -129,7 +137,9 @@ struct node* llget(LList* list, int index)
 
 void* llgetvalue(LList* list, int index)
 {
-	return (llget(list,index))->data;
+	Node* tmp = llget(list,index);
+	VALIDPNTR(tmp,NULL);
+	return tmp->data;
 }
 
 LList* llapply(LList* list, void (*func)(void* data))
@@ -137,7 +147,7 @@ LList* llapply(LList* list, void (*func)(void* data))
 	VALIDPNTR(list,NULL);
 	VALIDPNTR(func,NULL);
 
-	struct node* curr = list->head;
+	Node* curr = list->head;
 	while(curr)
 	{	
 		(*func)(curr->data);
@@ -155,7 +165,7 @@ LList* llmap(LList* list, void* (*func)(void* data))
 	LList* newlst;
 	if(! (newlst = llnew())) return NULL; 
 
-	struct node* curr = list->head;
+	Node* curr = list->head;
 	while(curr)
 	{
  		llappend(newlst, (*func)(curr->data));
@@ -173,7 +183,7 @@ LList* llfilter(LList* list, char (*func)(void* data))
 	LList* newlst;
 	if(! (newlst = llnew())) return NULL; 
 
-	struct node* curr = list->head;
+	Node* curr = list->head;
 	while(curr)
 	{
 		if((*func)(curr->data)) llappend(newlst, curr->data);
