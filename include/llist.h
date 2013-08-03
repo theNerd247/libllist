@@ -40,12 +40,14 @@
 #ifndef __LLIST
 #define __LLIST
 
-typedef struct node_st
+struct node_st
 {
 	void* data;
-	Node* next;
-	Node* prev;
-} Node;
+	struct node_st* next;
+	struct node_st* prev;
+};
+
+typedef struct node_st Node;
 
 typedef struct llist
 {

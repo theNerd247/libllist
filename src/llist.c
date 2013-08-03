@@ -41,7 +41,7 @@ Node* nodenew()
 int nodedestroy(Node* node)
 {
 	VALIDPNTR(node,1);
-	free(nd->data);
+	free(node->data);
 	free(node);
 	return 0;
 }
