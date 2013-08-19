@@ -2,11 +2,10 @@ libllist
 ========
 libllist is a shared library for linked lists. It contains all those necessary
 functions needed to create, manipulate, and delete linked lists and their
-internals (nodes, data, etc..). 
+internals (nodes, data, etc..).  URLs
 
-URLs
-====
 Github links:
+=============
 
   * http: http://www.github.com/theNerd247/libllist
   * ssh:  git@github.com:theNerd247/libllist.git
@@ -18,7 +17,6 @@ so far).
 
 __NOTICE:__ Arch Linux users! This software can be found on the AUR download it at:
 
-
 https://aur.archlinux.org/packages/libllist/
 
 Configuring
@@ -28,6 +26,15 @@ so will not (for now) revert to huge build tools such as automake/autoconf cmake
 or the like. Please edit the Makefile to suit your compile time needs. If you do
 edit the Makefile please commit the change and send a pull request to upstream
 repo (git@github.com:theNerd247/libllist.git).
+
+Patches
+-------
+Patches are found in the patches directory. Patches are optional, however they are
+recomended. Make will __NOT__ automatically install the patches, for now they should
+be manually installed. For those who are using the Arch Linux AUR PKGBUILD for
+building patches are automatically applied. Please note that some patches fix
+memory leaks and are not soley optimizations and not installing these could
+result in bad things.
 
 Building
 --------
@@ -66,11 +73,13 @@ level (1 being the highest)
 
 Changelog
 =========
-Patch: 0.0.2-1
-	* removed the PKGBUILD and md5 sum as they are only needed for Arch Linux users
 0.0.2
 	* PKGBUILD file added
 	* 3 new functions (llapply, llfilter, llmap)! See llist.h for their details
 0.0.1
   * repository initialized (Makefile, this REAMDE file, and much much more!)
   * basic llist functions (llnew, lladd, llinsert, llget) created
+
+Todo
+====
+	* fix lldestroy to use nodedestroy
