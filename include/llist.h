@@ -25,6 +25,8 @@
  * DESCRIPTION: main header file for libllist
  */
 
+#include <stddef.h>
+
 /*
  * MACRO: VALIDPNTR
  * 
@@ -220,5 +222,17 @@ LList* llfilter(LList* list, char (*func)(void* data));
  * NOTE: second argument should be a function that creates a new value to be contained by a new node
  */
 LList* llmap(LList* list, void* (*func)(void* data));
+
+/*
+ * FUNCTION: llremove
+ * 
+ * DESCRIPTION: removes node at index from the list
+ *
+ * PARAMETERS: LList* list, size_t index
+ *
+ * RETURNS: LList* - list with removed index. If error occurs then NULL is returned
+ * 
+ */
+LList* llremove(LList* list, size_t index);
 
 #endif 
