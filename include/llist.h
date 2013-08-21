@@ -25,6 +25,8 @@
  * DESCRIPTION: main header file for libllist
  */
 
+#include <stddef.h>
+
 /*
  * MACRO: VALIDPNTR
  * 
@@ -129,6 +131,20 @@ int lldestroy(LList* list);
 LList* llappend(LList* list, void* value);
 
 /*
+ * FUNCTION: llinssort
+ * 
+ * DESCRIPTION: insertion sort function. This function works best if list is already sorted before
+ * calling this function.
+ *
+ * PARAMETERS: LList* list, void* value 
+ *
+ * RETURNS: LList* - pointer to list with inserted data. If error occurs NULL is returned
+ * 
+ * NOTE: This function casts  all data contained in list to an unsigned int.
+ */
+LList* llinssort(LList* list, void* value);
+
+/*
  * FUNCTION: llget
  * 
  * PARAMETERS: LList* list, int index
@@ -191,6 +207,21 @@ LList*  llset(LList* list, void* value, int index);
  * NOTE: second argument should be a function that performs operations on the data of a node
  */
 LList* llapply(LList* list, void (*func)(void* data));
+
+/*
+ * FUNCTION: lltraverse
+ * 
+ * DESCRIPTION: similiar to llapply but the containing function can break stop the traversion at
+ * will
+ *
+ * PARAMETERS: LList* list, size_t (*func)(void* data)
+ *
+ * RETURNS: LList*  - list. If error occurs NULL is returned
+ *
+ * NOTE: if func returns a value > 0 then this function stops the traversion and returns
+ * 
+ */
+LList*  lltraverse(LList* list, size_t (*func)(void* data));
 
 /*
  * FUNCTION: llfilter

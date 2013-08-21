@@ -78,6 +78,23 @@ LList* llappend(LList* list, void* value)
 	return llinsert(list, value, list->length);
 }
 
+LList* llinssort(LList* list, void* value)
+{
+	VALIDPNTR(list,NULL);
+
+	int index = 0;	
+	size_t getind(void* data)
+	{
+		if(*((int*)data) > *((int*)value)) return 1;
+		index++;
+		return 0;
+	}	
+
+	lltraverse(list, &getind);
+
+	return llinsert(list, value, index);
+}
+
 LList* llinsert(LList* list, void* value, int index)
 {
 	//error check
@@ -151,6 +168,21 @@ LList* llapply(LList* list, void (*func)(void* data))
 	while(curr)
 	{	
 		(*func)(curr->data);
+		curr=curr->next;
+	}
+
+	return list;
+}
+
+LList* lltraverse(LList* list, size_t (*func)(void* data))
+{
+	VALIDPNTR(list,NULL);
+	VALIDPNTR(func,NULL);
+
+	Node* curr = list->head;
+	while(curr)
+	{	
+		if((*func)(curr->data) > 0) break;
 		curr=curr->next;
 	}
 

@@ -1,5 +1,6 @@
 #binary files
 lib/libllist.so*
+obj/
 
 #test files 
 tst/
