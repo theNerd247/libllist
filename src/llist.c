@@ -90,7 +90,7 @@ LList* llinssort(LList* list, void* value)
 		return 0;
 	}	
 
-	lltraverse(list, &getind);
+	llapply(list, &getind);
 
 	return llinsert(list, value, index);
 }
@@ -159,22 +159,7 @@ void* llgetvalue(LList* list, int index)
 	return tmp->data;
 }
 
-LList* llapply(LList* list, void (*func)(void* data))
-{
-	VALIDPNTR(list,NULL);
-	VALIDPNTR(func,NULL);
-
-	Node* curr = list->head;
-	while(curr)
-	{	
-		(*func)(curr->data);
-		curr=curr->next;
-	}
-
-	return list;
-}
-
-LList* lltraverse(LList* list, size_t (*func)(void* data))
+LList* llapply(LList* list, size_t (*func)(void* data))
 {
 	VALIDPNTR(list,NULL);
 	VALIDPNTR(func,NULL);
@@ -194,8 +179,8 @@ LList* llmap(LList* list, void* (*func)(void* data))
 	VALIDPNTR(list,NULL);
 	VALIDPNTR(func,NULL);
 	
-	LList* newlst;
-	if(! (newlst = llnew())) return NULL; 
+	LList* newlst = llnew();
+	VALIDPNTR(newlst, NULL);
 
 	Node* curr = list->head;
 	while(curr)
@@ -212,8 +197,8 @@ LList* llfilter(LList* list, char (*func)(void* data))
 	VALIDPNTR(list,NULL);
 	VALIDPNTR(func,NULL);
 	
-	LList* newlst;
-	if(! (newlst = llnew())) return NULL; 
+	LList* newlst = llnew();
+	VALIDPNTR(newlst,NULL);
 
 	Node* curr = list->head;
 	while(curr)

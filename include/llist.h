@@ -197,22 +197,7 @@ LList*  llset(LList* list, void* value, int index);
 /*
  * FUNCTION: llapply
  * 
- * PARAMETERS: LList* list, void (func*)(void* data) 
- *
- * RETURNS: LList* - given LList* with applied values
- * 
- * DESCRIPTION: applys a function to ALL the data nodes in a given LList
- *
- * NOTE: returns NULL if error occurs
- * NOTE: second argument should be a function that performs operations on the data of a node
- */
-LList* llapply(LList* list, void (*func)(void* data));
-
-/*
- * FUNCTION: lltraverse
- * 
- * DESCRIPTION: similiar to llapply but the containing function can break stop the traversion at
- * will
+ * DESCRIPTION: traverses through a list running a function on all the data
  *
  * PARAMETERS: LList* list, size_t (*func)(void* data)
  *
@@ -221,7 +206,7 @@ LList* llapply(LList* list, void (*func)(void* data));
  * NOTE: if func returns a value > 0 then this function stops the traversion and returns
  * 
  */
-LList*  lltraverse(LList* list, size_t (*func)(void* data));
+LList*  llapply(LList* list, size_t (*func)(void* data));
 
 /*
  * FUNCTION: llfilter
