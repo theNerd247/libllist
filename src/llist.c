@@ -125,6 +125,15 @@ LList* llinsert(LList* list, void* value, int index)
 	return list;
 }
 
+LList* llremove(LList* list, size_t index)
+{
+	Node* node;
+	VALIDPNTR((node = llget(list,index)),NULL);
+	node->prev->next = node->next;
+	nodedestroy(node);
+	return list;
+}
+
 LList*  llset(LList* list, void* value, int index)
 {
 	VALIDPNTR(list,NULL);

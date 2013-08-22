@@ -2,8 +2,9 @@
 lib/libllist.so*
 obj/
 
-#test files 
+#test/tmp files 
 tst/
+*.sw*
 
 #Arch Linux PKGBUILD
 PKGBUILD
