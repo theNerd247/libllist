@@ -1,1 +1,2 @@
 f4b474f0a093d1235c8416347497b1d7  libllist-0.0.2.tar.gz
+d4bddb2478ed56ebb748ea430be88187  patches/lldestroy.patch
