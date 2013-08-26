@@ -67,7 +67,7 @@ int lldestroy(LList* list)
 	{
 		temp = crnt;
 		crnt = crnt->next;
-		free(temp);	
+		nodedestroy(temp);	
 	}
 	free(list);
 	return 0;
