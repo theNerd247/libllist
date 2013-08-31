@@ -1,5 +1,5 @@
 #binary files
-lib/libllist.so*
+lib/
 obj/
 
 #test/tmp files 
