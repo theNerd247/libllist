@@ -82,6 +82,13 @@ level (1 being the highest)
 
 Changelog
 =========
+0.0.3
+	* PKGBUILD removed 
+	* patch lldestroy.patch removed and NOT applied 
+	* llapply prototype changed (iteration loop is now stopable by function argument)
+	* functions patched: llapply, lldestroy, llremove
+	* removed function: nodedestroy (became obsolete)
+	* code should be more memory safe
 0.0.2
 	* PKGBUILD file added
 	* 3 new functions (llapply, llfilter, llmap)! See llist.h for their details
