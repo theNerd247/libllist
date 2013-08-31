@@ -51,7 +51,7 @@ struct node_st
 
 typedef struct node_st Node;
 
-typedef struct llist
+typedef struct llist_st
 {
 	Node* head;
 	Node* tail;
@@ -70,20 +70,6 @@ typedef struct llist
  * NOTE: returns a NULL pointer on error
  */
 Node* nodenew();
-
-/*
- * FUNCTION: nodedestroy
- * 
- * PARAMETERS: Node* node
- *
- * RETURNS: int - error code 
- * 
- * DESCRIPTION: frees memory used by given node (including the Node* itself)
- *
- * NOTE: this does not free the next and prev variables in the structure as this will destroy the
- * list the node is found in
- */
-int nodedestroy(Node* node);
 
 /*
  * FUNCTION: llnew

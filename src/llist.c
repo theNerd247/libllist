@@ -38,14 +38,6 @@ Node* nodenew()
 	return newnode;
 }
 
-int nodedestroy(Node* node)
-{
-	VALIDPNTR(node,1);
-	free(node->data);
-	free(node);
-	return 0;
-}
-
 LList* llnew()
 {
 	LList* newlist = (LList*)malloc(sizeof(LList));
@@ -62,12 +54,11 @@ int lldestroy(LList* list)
 {
 	VALIDPNTR(list,1);
 	Node* crnt = list->head;
-	Node* temp = NULL;
 	while(crnt)	
 	{
-		temp = crnt;
+		Node* temp = crnt;
 		crnt = crnt->next;
-		nodedestroy(temp);	
+		free(temp);
 	}
 	free(list);
 	return 0;
@@ -130,7 +121,7 @@ LList* llremove(LList* list, size_t index)
 	Node* node;
 	VALIDPNTR((node = llget(list,index)),NULL);
 	node->prev->next = node->next;
-	nodedestroy(node);
+	free(node);
 	return list;
 }
 

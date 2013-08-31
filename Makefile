@@ -1,67 +1,85 @@
 ##############################
-#Makefile for libllist 
+# Makefile for libllist
 ##############################
 
 SHELL=/bin/sh
 
 CC=gcc
 
-LIBNAME=libllist
-LIBDIR=lib
-VERSION=0.0.2
-
-PKGNAME=$(LIBNAME)-$(VERSION)
-PKGLIST=Makefile include/ src/ README.md gpl-3.0.txt
+VERSION=0.0.3
 
 DESTDIR=
 PREFIX=$(DESTDIR)/usr
 INSTALLDIR=$(PREFIX)/lib
-HEADERINSTALL=$(PREFIX)/include
+HDRINSTALLDIR=$(PREFIX)/include
 
-IDIR=include
+LIBNAME=libllist
+LIBDIR=lib
 SONAME=$(LIBNAME).so
 OUTNAME=$(LIBNAME).so.$(VERSION)
-LFLAGS=-I$(IDIR) -lm -shared -fPIC -Wl,-soname,$(SONAME)
-CFLAGS=-c -Wall -g #uncomment for debuging with gdb
 
+PKGDIR=pkgs
+PKGNAME=$(PKGDIR)/$(LIBNAME)-$(VERSION)
+PKGLIST=Makefile src/ include/ 
+
+IDIR=include
+LFLAGS=-I$(IDIR) -fPIC -g #uncomment for debuging with gdb
+SHRDFLAGS= -shared -Wl,-soname,$(SONAME)
+CFLAGS=-c -g #uncomment for debuging with gdb
+
+HEADERS:=$(wildcard $(IDIR)/*.h)
+HDRS=$(patsubst $(IDIR)/%.h, $(HDRINSTALLDIR)/%.h, $(HEADERS))
 SRCS=*.c 
 SRCDIR=src
 SRC:=$(wildcard $(SRCDIR)/$(SRCS))
 
+TSRCS=tst.c
+TSRCDIR=tst
+TSRC=$(patsubst %.c, $(TSRCDIR)/%.c, $(TSRCS))
+TOBJ := $(patsubst $(TSRCDIR)/%.c, $(TSRCDIR)/%.o, $(TSRC))
+
 OBJDIR=obj
-OBJ:=$(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRC))
+OBJ := $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRC))
 
-.PHONY: setup clean install pkg
+.PHONY: setup clean pkg
 
-all: setup $(OBJ) 
-	$(CC) $(LFLAGS) $(OBJ) -o $(LIBDIR)/$(OUTNAME)
+all: setup $(OBJ) $(BINDIR)
+	$(CC) $(LFLAGS) $(SHRDFLAGS) $(OBJ) -o $(LIBDIR)/$(OUTNAME)
 
-reinstall: uninstall install clean 
+pkg:
+	mkdir -p $(PKGNAME)
+	cp -r  $(PKGLIST) $(PKGNAME)
+	tar -vc -f $(PKGNAME).tar $(PKGNAME)
+	gzip $(PKGNAME).tar 
+	rm -r $(PKGNAME)	
+	md5sum $(PKGNAME).tar.gz > md5.txt
 
-install: all clean
-	mkdir -p $(HEADERINSTALL)
-	mkdir -p $(INSTALLDIR) 
-	install $(IDIR)/*.h -t $(HEADERINSTALL)
-	install $(LIBDIR)/$(OUTNAME) -t $(INSTALLDIR)
-	ldconfig -n $(INSTALLDIR) 
-
-uninstall: 
-	rm -Ii $(INSTALLDIR)/$(SONAME)*
-
-$(OBJDIR)/%.o: $(SRCDIR)/%.c 
-	$(CC) $(LFLAGS) $(CFLAGS) $< -o $@
+testing: setup $(TOBJ) $(OBJ)
+	$(CC) $(LFLAGS) $(TOBJ) $(OBJ) -o $(TSRCDIR)/tst
 
 setup: 
-	mkdir -p $(OBJDIR)
 	mkdir -p $(LIBDIR)
+	mkdir -p $(OBJDIR)
 
 clean: 
 	rm -rf $(OBJDIR)
 
-pkg:
-	mkdir -p $(PKGNAME)
-	cp -r $(PKGLIST) $(PKGNAME)
-	tar -uvhf $(PKGNAME).tar $(PKGNAME)
-	gzip $(PKGNAME).tar
-	md5sum $(PKGNAME).tar.gz > md5.txt
-	rm -r $(PKGNAME)
+reinstall: uninstall install clean 
+
+install: all clean
+	mkdir -p $(HDRINSTALLDIR)
+	mkdir -p $(INSTALLDIR) 
+	install $(HEADERS) -t $(HDRINSTALLDIR)
+	install $(LIBDIR)/$(OUTNAME) -t $(INSTALLDIR)
+	ldconfig -n $(INSTALLDIR) 
+
+uninstall: 
+	rm -I $(INSTALLDIR)/$(SONAME)* 
+	rm -I $(HDRS)
+
+$(TSRCDIR)/%.o: $(TSRCDIR)/%.c
+	$(CC) $(LFLAGS) $(CFLAGS) $< -o $@
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.c 
+	$(CC) $(LFLAGS) $(CFLAGS) $< -o $@
+
