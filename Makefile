@@ -63,6 +63,7 @@ setup:
 
 clean: 
 	rm -rf $(OBJDIR)
+	rm -rf $(LIBDIR)
 
 reinstall: uninstall install clean 
 
