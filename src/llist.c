@@ -66,7 +66,27 @@ int lldestroy(LList* list)
 
 LList* llappend(LList* list, void* value)
 {
-	return llinsert(list, value, list->length);
+	VALIDPNTR(list, NULL);
+	VALIDPNTR(value, NULL);	
+		
+	Node* newnode;
+	VALIDPNTR((newnode = nodenew()), NULL);
+	newnode->data = value;
+
+	if(list->length == 0)
+	{
+		list->head = newnode;
+		list->tail = newnode;
+	}	
+	else	
+	{
+		newnode->prev = list->tail;
+		list->tail->next = newnode;
+		list->tail = newnode;
+	}
+
+	list->length++;
+	return list;
 }
 
 LList* llinssort(LList* list, void* value)
