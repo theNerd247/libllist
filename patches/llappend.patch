@@ -1,0 +1,32 @@
+--- src/llist.c	2013-09-01 16:05:55.299332234 -0400
++++ llist.c.orig	2013-09-01 16:04:26.112663176 -0400
+@@ -66,7 +66,28 @@
+ 
+ LList* llappend(LList* list, void* value)
+ {
+-	return llinsert(list, value, list->length);
++	VALIDPNTR(list, NULL);
++	VALIDPNTR(value, NULL);	
++		
++	Node* newnode;
++	VALIDPNTR((newnode = nodenew()), NULL);
++	newnode->data = value;
++
++	if(list->length == 0)
++	{
++		list->head = newnode;
++		list->tail = newnode;
++	}	
++	else	
++	{
++		//newnode->next is already NULL
++		newnode->prev = list->tail;
++		list->tail->next = newnode;
++		list->tail = newnode;
++	}
++
++	list->length++;
++	return list;
+ }
+ 
+ LList* llinssort(LList* list, void* value)
